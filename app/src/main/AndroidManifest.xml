@@ -31,6 +31,15 @@
         <activity
             android:name="com.team.sioh6.MainActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UserAccountActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/my_account">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"
+                />
+        </activity>
+
     </application>
 
 </manifest>

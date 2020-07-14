@@ -1,16 +1,10 @@
 package com.team.sioh6;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
@@ -26,9 +20,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             View header = navigationView.getHeaderView(0);
+            header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(MainActivity.this,"User Account",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this,UserAccountActivity.class);
+                    startActivity(intent);
+                }
+            });
 
             //Uri personPhoto = acct.getPhotoUrl();
             //ImageView imageView = header.findViewById(R.id.imageView);
@@ -92,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
             String personEmail = acct.getEmail();
             TextView email = header.findViewById(R.id.account_email);
             email.setText(personEmail);
-
-            String personId = acct.getId();
 
         }
     }
