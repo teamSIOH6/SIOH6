@@ -32,9 +32,23 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation 'com.google.android.material:material:1.1.0'
+
     //viewpager dots
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:3.0.3'
 
     //google sign in
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
+
+    //card-view
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    //circular imageview
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    //recycler view
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

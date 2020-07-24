@@ -29,36 +29,43 @@
         android:weightSum="8"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_skip"
             android:text="@string/skip"
-            android:textColor="@color/Black"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             />
 
         <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dotIndicator"
-            app:dotsColor="@color/TransparentWhite"
-            app:selectedDotColor="@color/white"
+            app:dotsColor="@color/colorPrimary"
+            app:selectedDotColor="@color/colorAccent"
             app:dotsSize="15dp"
             app:dotsSpacing="5dp"
             app:progressMode="true"
             android:layout_centerHorizontal="true"/>
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/btn_next"
             android:text="@string/next"
-            android:textColor="@color/Black"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
             android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>

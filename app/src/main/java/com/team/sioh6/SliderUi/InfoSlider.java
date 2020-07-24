@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,7 @@ public class InfoSlider extends AppCompatActivity {
     private WormDotsIndicator dotsIndicator;
     private SliderAdapter sliderAdapter;
 
-    private Button btnnext, btnskip;
+    private TextView btnnext, btnskip;
 
     private int totalPage;
     private int mCurrentPage;

@@ -16,20 +16,11 @@ import com.team.sioh6.R;
 
 public class LearningFragment extends Fragment {
 
-    private LearningViewModel learningViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        learningViewModel =
-                ViewModelProviders.of(this).get(LearningViewModel.class);
         View root = inflater.inflate(R.layout.fragment_learning, container, false);
         final TextView textView = root.findViewById(R.id.text_learning);
-        learningViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        textView.setText("This is Learning fragment");
         return root;
     }
 }

@@ -1,6 +1,7 @@
 package com.team.sioh6;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -14,12 +15,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_sell, R.id.nav_learning,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_tools, R.id.nav_share, R.id.nav_buy)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -82,9 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            //Uri personPhoto = acct.getPhotoUrl();
-            //ImageView imageView = header.findViewById(R.id.imageView);
-            //imageView.setImageURI(personPhoto);
+            Uri personPhoto = acct.getPhotoUrl();
+            ImageView imageView = header.findViewById(R.id.imageView);
+            Picasso.with(this).load(personPhoto).placeholder(this.getResources()
+                    .getDrawable(R.drawable.loading)).into(imageView);
 
             String personName = acct.getDisplayName();
             TextView txt = header.findViewById(R.id.account_name);
