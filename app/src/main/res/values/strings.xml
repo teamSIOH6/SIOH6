@@ -13,7 +13,8 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_buy">Buy</string>
-
+    <string name="sell_add_product">Add Product</string>
+    <string name="sell_prev_product">Previous Product</string>
     <string name="skip">SKIP</string>
     <string name="next">NEXT</string>
     <string name="finish">FINISH</string>
