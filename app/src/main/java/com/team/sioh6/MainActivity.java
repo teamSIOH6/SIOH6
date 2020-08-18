@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_sell, R.id.nav_learning,
+                R.id.nav_home, R.id.nav_sell, //R.id.nav_learning,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_buy)
                 .setDrawerLayout(drawer)
                 .build();
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
             ImageView imageView = header.findViewById(R.id.imageView);
             Picasso.with(this).load(personPhoto).placeholder(this.getResources()
-                    .getDrawable(R.drawable.loading)).into(imageView);
+                    .getDrawable(R.drawable.user_profile)).into(imageView);
 
             String personName = acct.getDisplayName();
             TextView txt = header.findViewById(R.id.account_name);

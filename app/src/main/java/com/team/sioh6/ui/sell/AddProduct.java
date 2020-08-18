@@ -1,4 +1,11 @@
-package com.team.sioh6.ui.buy;
+package com.team.sioh6.ui.sell;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -9,21 +16,9 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,63 +27,68 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.team.sioh6.BasicFunctionHandler;
 import com.team.sioh6.R;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AddProduct extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
-public class BuyFragment extends Fragment implements View.OnClickListener {
-
-    private RecyclerView recyclerView;
-    private List<BuyModel> buyModelList;
-    private BuyAdapter adapter;
-
+    private final String TAG = "AddProduct";
+    private GoogleMap mMap;
     private BasicFunctionHandler handler;
     private ProgressDialog dialog;
-    private FloatingActionButton nearbySellers;
-    public static double myLat, myLong;
+    private Button submit;
 
     private final int RESOLVABLE_REQUEST_CODE=1;
     int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 2;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_buy, container, false);
-        recyclerView = root.findViewById(R.id.recyclerView);
-        nearbySellers = root.findViewById(R.id.gps);
-        buyModelList = new ArrayList<>();
-        handler = new BasicFunctionHandler(getContext());
-        dialog = new ProgressDialog(getContext());
-        adapter = new BuyAdapter(getActivity(),buyModelList,getChildFragmentManager());
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
-        createLocationRequest();
+    public static double myLat, myLong;
+    private Marker marker;
 
-        nearbySellers.setOnClickListener(this);
-        return root;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_product);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setTitle("Add Product");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        handler = new BasicFunctionHandler(this);
+        dialog = new ProgressDialog(this);
+        submit = findViewById(R.id.submit);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        mapFragment.getMapAsync(AddProduct.this);
+
+        submit.setOnClickListener(this);
     }
 
-    private void getNearBySellers(double myLat, double myLong) {
-        buyModelList.clear();
-        for (int i = 1 ; i<= 4 ; i++){
-            BuyModel buyModel = new BuyModel();
-            buyModel.setId(i);
-            buyModel.setUserName("User Name " + i);
-            buyModelList.add(buyModel);
-        }
-        adapter.notifyDataSetChanged();
-        dialog.dismiss();
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        createLocationRequest();
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        Log.d(TAG,"moveCamera: moving camera to: lat " + latLng.latitude + " log: " + latLng.longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
     private void createLocationRequest(){
-        dialog.setMessage("Fetching Near by Sellers");
+        dialog.setMessage("Fetching Location");
         dialog.setCancelable(false);
         dialog.show();
         LocationRequest locationRequest = LocationRequest.create();
@@ -96,7 +96,7 @@ public class BuyFragment extends Fragment implements View.OnClickListener {
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
-        SettingsClient client = LocationServices.getSettingsClient(getContext());
+        SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
         task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
             @Override
@@ -118,21 +118,21 @@ public class BuyFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-
     }
 
     void requestCurrentLocationOfUser(){
         if (isPermissionGranted()){
-            FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getActivity());
+            FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(this);
             fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
+                    dialog.dismiss();
                     if (location!=null){
-                        //requestLocationUpdates();
-                        //requestLocationUpdates();
                         myLat = location.getLatitude();
                         myLong = location.getLongitude();
-                        getNearBySellers(myLat,myLong);
+                        marker = mMap.addMarker(new MarkerOptions().position(new LatLng(myLat,myLong)).title("Set Pickup Location"));
+                        marker.setDraggable(true);
+                        moveCamera(new LatLng(myLat,myLong),15f);
                         Log.e("User Location","Latitude : "+location.getLatitude()+" Longitude : "+location.getLongitude());
                     }
                 }
@@ -140,21 +140,12 @@ public class BuyFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.gps:
-                createLocationRequest();
-                break;
-        }
-    }
-
     private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(),
+                ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION);
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -181,6 +172,27 @@ public class BuyFragment extends Fragment implements View.OnClickListener {
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION) {
             requestCurrentLocationOfUser();
             return;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.submit:
+                finish();
+                break;
         }
     }
 }

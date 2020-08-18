@@ -1,6 +1,7 @@
 package com.team.sioh6.SliderUi;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,16 @@ public class SliderAdapter extends PagerAdapter {
 
     public SliderAdapter(Context context) {
         this.context = context;
+        sliderBg[0] = context.getResources().getDrawable(R.drawable.slider_1);
+        sliderBg[1] = context.getResources().getDrawable(R.drawable.slider_2);
+        sliderBg[2] = context.getResources().getDrawable(R.drawable.slider_3);
     }
 
-    public String[] pageNo = {
-      "Page 1","Page 2","Page 3"
-    };
+    public Drawable[] sliderBg = new Drawable[3];
 
     @Override
     public int getCount() {
-        return pageNo.length;
+        return sliderBg.length;
     }
 
     @Override
@@ -41,8 +43,8 @@ public class SliderAdapter extends PagerAdapter {
         inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.slide_layout,container,false);
 
-        TextView txt = view.findViewById(R.id.page_no);
-        txt.setText(pageNo[position]);
+        RelativeLayout relativeLayout = view.findViewById(R.id.slide_layout_root);
+        relativeLayout.setBackground(sliderBg[position]);
 
         container.addView(view);
 

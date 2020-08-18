@@ -46,12 +46,12 @@ public class InfoSlider extends AppCompatActivity {
         mSlideViewPager = findViewById(R.id.slide_view_pager);
         dotsIndicator = findViewById(R.id.dotIndicator);
 
-        sliderAdapter = new SliderAdapter(this);
+        sliderAdapter = new SliderAdapter(InfoSlider.this);
 
         mSlideViewPager.setAdapter(sliderAdapter);
         dotsIndicator.setViewPager(mSlideViewPager);
         mSlideViewPager.addOnPageChangeListener(onPageChangeListener);
-        totalPage = sliderAdapter.pageNo.length;
+        totalPage = sliderAdapter.sliderBg.length;
 
         btnskip.setOnClickListener(new View.OnClickListener() {
             @Override

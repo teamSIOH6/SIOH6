@@ -23,11 +23,11 @@
         android:label="@string/menu_sell"
         tools:layout="@layout/fragment_sell" />
 
-    <fragment
+    <!--<fragment
         android:id="@+id/nav_learning"
         android:name="com.team.sioh6.ui.learning.LearningFragment"
         android:label="@string/menu_learning"
-        tools:layout="@layout/fragment_learning" />
+        tools:layout="@layout/fragment_learning" />-->
 
     <fragment
         android:id="@+id/nav_tools"
